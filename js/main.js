@@ -1,8 +1,19 @@
 $(function () {
+    /////////////////////////////////////
     $('.top_close_btn').on('click', function () {
         $('.TopBanner').addClass('on');
         $('.Section01').addClass('on');
     });
+
+    $('.lang strong').on('click', function () {
+        $(this).toggleClass('on');
+        $('.lang').toggleClass('on');
+    });
+
+    $('.top_search strong').on('click', function () {
+        $(this).toggleClass('on');
+        $('.top_search').toggleClass('on');
+    })
 
     $('.main_slider').on('init reInit afterChange', function (e, ms, c) {
         var current = $('.main_slider .slick-current');
@@ -81,6 +92,71 @@ $(function () {
         var sct = $(window).scrollTop();
         sct > 0
             ? $('.Header').addClass('on')
-            : $('.Header').removeClass('on')
+            : $('.Header').removeClass('on');
+        sct > 800
+            ? $('.to_top').fadeIn()
+            : $('.to_top').fadeOut();
+    });
+
+
+    $('.movie_case').YTPlayer({
+        videoURL: 'https://youtu.be/raw3Nu0_mBQ',
+        containment: 'self',
+        autoPlay: true,
+        mute: true,
+        showControls: true,
+        playOnlyIfVisible: true,
+    });
+
+
+    var swMovie = true;
+    $('.movie_handler button').on('click', function () {
+        $(this).toggleClass('on');
+        swMovie
+            ? $('.movie_case').YTPPause()
+            : $('.movie_case').YTPPlay();
+        swMovie = !swMovie;
+    });
+
+
+    $('.Footer .ft_top .right li').on('click', function () {
+        var idx = $(this).index(); // 0,1,2
+        if ($(this).hasClass('on')) {
+            $(this).removeClass('on');
+            $('.Footer .ft_top .content>ul').eq(idx).removeClass('on')
+        } else {
+            $(this).addClass('on').siblings().removeClass('on');
+            $('.Footer .ft_top .content>ul').eq(idx).addClass('on').siblings().removeClass('on');
+        }
+    });
+
+
+    $('#FL').on('change', function () {
+        var lik = $(this).val();
+        lik && window.open(lik)
     })
-});
+
+    $('.to_top').on('click', function () {
+        $('html,body').animate({ scrollTop: 0 }, 600)
+    });
+
+
+    $('.popup').on('wheel', function (e) {
+        e.preventDefault();
+    });
+
+    $('.popup button').on('click', function () {
+        $('.popup').hide();
+    });
+
+    var getCookie = $.cookie('popup');
+
+    if (!getCookie) {
+        $('.popup').show();
+    }
+    $('.popup input').on('change', function () {
+        $.cookie('popup', 'value', { expires: 1 });
+        $('.popup').hide();
+    });
+
+})
